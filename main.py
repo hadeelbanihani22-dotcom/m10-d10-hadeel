@@ -28,41 +28,47 @@ class RetrieveRequest(BaseModel):
         query — non-empty search string (1..500 chars).
         k — number of chunks to return (1..10, default 3).
     """
-    query: str = Field(..., min_length=1, max_length=500)
-    k: int = Field(3, ge=1, le=10)
+    # TODO: declare `query: str` with a Field(..., min_length=..., max_length=...)
+    #       constraint and `k: int` with ge=... and le=... and a default.
+    pass
 
 
 class Chunk(BaseModel):
     """One retrieved chunk."""
-    chunk_id: int
-    text: str
-    score: float
+    # TODO: declare chunk_id (int), text (str), score (float).
+    pass
 
 
 class RetrieveResponse(BaseModel):
     """Response body for POST /retrieve."""
-    retrieved: List[Chunk]
+    # TODO: declare `retrieved: List[Chunk]`.
+    pass
 
 
 class HealthResponse(BaseModel):
     """Response body for GET /healthz."""
-    status: str
+    # TODO: declare `status: str`.
+    pass
 
 
 # --- Path operations -------------------------------------------------
 
-@app.post("/retrieve", response_model=RetrieveResponse)
+@app.post("/retrieve")
 def retrieve(req: RetrieveRequest):
     """Retrieve top-k chunks for a query.
 
     Returns RetrieveResponse with the top-k token-overlap matches. If no
     chunk overlaps, returns 200 with `retrieved=[]` (not an error).
     """
-    results = retrieve_top_k(req.query, req.k)
-    return RetrieveResponse(retrieved=[Chunk(**r) for r in results])
+    # TODO: set response_model=RetrieveResponse on the decorator above,
+    #       call retrieve_top_k(req.query, req.k) (imported above from
+    #       retrieval.py), and wrap the returned list in a RetrieveResponse.
+    raise NotImplementedError
 
 
-@app.get("/healthz", response_model=HealthResponse)
+@app.get("/healthz")
 def healthz():
     """Liveness probe. Returns 200 with {"status": "ok"}."""
-    return HealthResponse(status="ok")
+    # TODO: annotate response_model=HealthResponse on the decorator above
+    #       and return a HealthResponse.
+    raise NotImplementedError
